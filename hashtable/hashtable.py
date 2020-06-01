@@ -7,9 +7,13 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
+
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
+data = [None] * 8
 
 
 class HashTable:
@@ -20,9 +24,40 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
-        self.capacity = capacity
+    def __init__(self):
+        # size of internal array
+        self.capacity = MIN_CAPACITY
+        # Number of elements inserted
+        self.size = 0
+        # internal array (stores each inserted value in bucket based on provided key)
+        self.buckets = [None]*self.capacity
 
+    def hashing_function(key):
+        hash = 5381
+        for x in key:
+            hash = (hash * 33) + ord(x)
+        return hash
+    
+#     def my_hashing_function(self, key):
+sum = 0
+#     string_bytes = self.encode()
+# ​
+#     total = 0
+# ​
+#     for b in string_bytes:
+#         total += b
+# ​
+#     return total
+
+
+# def my_hashing_func(str, list_size):
+#     bytes_representation = str.encode()
+
+#     sum = 0
+#     for byte in bytes_representation:
+#         sum += byte
+
+#     return sum % list_size
 
     def get_num_slots(self):
         """
@@ -35,8 +70,11 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        hash_val = my_hashing_function(self)
+        return hash_val % len(data)
 
 
+# **********************************
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
@@ -45,7 +83,7 @@ class HashTable:
         """
         # Your code here
 
-
+# **********************************
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
@@ -95,7 +133,7 @@ class HashTable:
         # Your code here
 
 
-    def get(self, key):
+    def get(self, key, value):
         """
         Retrieve the value stored with the given key.
 
@@ -104,6 +142,10 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # Get Slot for Key
+        slot = get_num_slots
+        # Store value there
+        data[slot] = value
 # *************************************
 
     def resize(self, new_capacity):
