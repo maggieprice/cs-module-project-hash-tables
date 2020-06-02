@@ -7,10 +7,12 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    # def __repr__(self):
+    #     return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
+
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
-
 
 class HashTable:
     """
@@ -21,8 +23,12 @@ class HashTable:
     """
 
     def __init__(self, capacity):
-        # Your code here
+        # size of internal array
+        self.capacity = capacity
+        # internal array (stores each inserted value in bucket based on provided key)
+        self.data = [None] * self.capacity
 
+# **********************************
 
     def get_num_slots(self):
         """
@@ -34,8 +40,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-
+        
 
     def get_load_factor(self):
         """
@@ -45,7 +50,7 @@ class HashTable:
         """
         # Your code here
 
-
+# **********************************
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
@@ -57,13 +62,11 @@ class HashTable:
 
 
     def djb2(self, key):
-        """
-        DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
-        """
-        # Your code here
-
+        hash = 5381
+        for c in key:
+            hash = (hash * 33) + ord(c)
+        return hash
+        
 
     def hash_index(self, key):
         """
@@ -81,7 +84,9 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        slot = self.hash_index(key)
+        self.data[slot] = HashTableEntry(key, value)
+
 
 
     def delete(self, key):
@@ -92,7 +97,9 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        # slot = self.hash_index(key)
+        # self.buckets[slot] = None
+        self.put(key, None)
 
 
     def get(self, key):
@@ -104,7 +111,14 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        # Get Slot for Key
+        slot = self.hash_index(key)
+        # Store value there
+        hash_entry = self.data[slot]
+        if hash_entry is not None:
+            return hash_entry.value
 
+# *************************************
 
     def resize(self, new_capacity):
         """
