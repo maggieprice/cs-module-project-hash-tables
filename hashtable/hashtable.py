@@ -7,13 +7,12 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
-    def __repr__(self):
-        return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
+    # def __repr__(self):
+    #     return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
 
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
-
 
 class HashTable:
     """
@@ -23,14 +22,13 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self):
+    def __init__(self, capacity):
         # size of internal array
-        self.capacity = MIN_CAPACITY
-        # Number of elements inserted
-        self.size = 0
+        self.capacity = capacity
         # internal array (stores each inserted value in bucket based on provided key)
-        self.buckets = [None]*self.capacity
+        self.data = [None] * self.capacity
 
+# **********************************
 
     def get_num_slots(self):
         """
@@ -42,12 +40,8 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
-        hash_val = djb2(self)
-        return hash_val % len(capacity)
+        
 
-
-# **********************************
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
@@ -69,8 +63,8 @@ class HashTable:
 
     def djb2(self, key):
         hash = 5381
-        for x in key:
-            hash = (hash * 33) + ord(x)
+        for c in key:
+            hash = (hash * 33) + ord(c)
         return hash
         
 
@@ -90,12 +84,12 @@ class HashTable:
 
         Implement this.
         """
-        slot = get_slot(key)
-        capacity[slot] = HashTableEntry(key, value)
+        slot = self.hash_index(key)
+        self.data[slot] = HashTableEntry(key, value)
 
 
 
-    def delete(key):
+    def delete(self, key):
         """
         Remove the value stored with the given key.
 
@@ -103,10 +97,12 @@ class HashTable:
 
         Implement this.
         """
-        put(key, None)
+        # slot = self.hash_index(key)
+        # self.buckets[slot] = None
+        self.put(key, None)
 
 
-    def get(self, key, value):
+    def get(self, key):
         """
         Retrieve the value stored with the given key.
 
@@ -116,9 +112,12 @@ class HashTable:
         """
         # Your code here
         # Get Slot for Key
-        slot = get_num_slots
+        slot = self.hash_index(key)
         # Store value there
-        capacity[slot] = value
+        hash_entry = self.data[slot]
+        if hash_entry is not None:
+            return hash_entry.value
+
 # *************************************
 
     def resize(self, new_capacity):
