@@ -13,7 +13,6 @@ class HashTableEntry:
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
-data = [None] * 8
 
 
 class HashTable:
@@ -32,32 +31,6 @@ class HashTable:
         # internal array (stores each inserted value in bucket based on provided key)
         self.buckets = [None]*self.capacity
 
-    def hashing_function(key):
-        hash = 5381
-        for x in key:
-            hash = (hash * 33) + ord(x)
-        return hash
-    
-#     def my_hashing_function(self, key):
-sum = 0
-#     string_bytes = self.encode()
-# ​
-#     total = 0
-# ​
-#     for b in string_bytes:
-#         total += b
-# ​
-#     return total
-
-
-# def my_hashing_func(str, list_size):
-#     bytes_representation = str.encode()
-
-#     sum = 0
-#     for byte in bytes_representation:
-#         sum += byte
-
-#     return sum % list_size
 
     def get_num_slots(self):
         """
@@ -70,8 +43,8 @@ sum = 0
         Implement this.
         """
         # Your code here
-        hash_val = my_hashing_function(self)
-        return hash_val % len(data)
+        hash_val = djb2(self)
+        return hash_val % len(capacity)
 
 
 # **********************************
@@ -95,13 +68,11 @@ sum = 0
 
 
     def djb2(self, key):
-        """
-        DJB2 hash, 32-bit
-
-        Implement this, and/or FNV-1.
-        """
-        # Your code here
-
+        hash = 5381
+        for x in key:
+            hash = (hash * 33) + ord(x)
+        return hash
+        
 
     def hash_index(self, key):
         """
@@ -119,10 +90,12 @@ sum = 0
 
         Implement this.
         """
-        # Your code here
+        slot = get_slot(key)
+        capacity[slot] = HashTableEntry(key, value)
 
 
-    def delete(self, key):
+
+    def delete(key):
         """
         Remove the value stored with the given key.
 
@@ -130,7 +103,7 @@ sum = 0
 
         Implement this.
         """
-        # Your code here
+        put(key, None)
 
 
     def get(self, key, value):
@@ -145,7 +118,7 @@ sum = 0
         # Get Slot for Key
         slot = get_num_slots
         # Store value there
-        data[slot] = value
+        capacity[slot] = value
 # *************************************
 
     def resize(self, new_capacity):
