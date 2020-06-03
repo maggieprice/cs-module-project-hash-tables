@@ -7,12 +7,62 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
-    # def __repr__(self):
-    #     return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
+    def __repr__(self):
+        return f'HashTableEntry({repr(self.key)}, {repr(self.value)})'
 
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+    def __str__(self):
+        r = ""
+        cur = self.head
+        while cur is not None: 
+            r += f'({cur.value})'
+            if cur.next is not None:
+                r += ' ->'
+            cur = cur.next
+        return r
+    def insert_at_head(self, node):
+        node.next = self.head
+        self.head = node
+​
+    def find(self, value):
+        cur = self.head
+​
+        while cur is not None:
+            if cur.value == value:
+                return cur
+​
+            cur = cur.next
+​
+        return None
+    def delete(self, value):
+        cur = self.head
+​
+        if cur.value == value:
+            self.head = self.head.next
+            return cur
+
+        prev = cur
+        cur = cur.next
+​
+        while cur is not None:
+            if cur.value == value:  
+                prev.next = cur.next  
+                return cur
+​
+            else:
+                prev = prev.next
+                cur = cur.next
+​
+        return None
+​
+
+    
 
 class HashTable:
     """
@@ -28,8 +78,6 @@ class HashTable:
         # internal array (stores each inserted value in bucket based on provided key)
         self.data = [None] * self.capacity
 
-# **********************************
-
     def get_num_slots(self):
         """
         Return the length of the list you're using to hold the hash
@@ -40,7 +88,7 @@ class HashTable:
 
         Implement this.
         """
-        
+        return self.capacity
 
     def get_load_factor(self):
         """
@@ -48,7 +96,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        return self.elements / self.capacity
 
 # **********************************
     def fnv1(self, key):
@@ -86,7 +134,7 @@ class HashTable:
         """
         slot = self.hash_index(key)
         self.data[slot] = HashTableEntry(key, value)
-
+        
 
 
     def delete(self, key):
