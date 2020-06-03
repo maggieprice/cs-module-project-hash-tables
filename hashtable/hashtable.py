@@ -17,15 +17,7 @@ MIN_CAPACITY = 8
 class LinkedList:
     def __init__(self):
         self.head = None
-    # def __str__(self):
-    #     r = ""
-    #     cur = self.head
-    #     while cur is not None: 
-    #         r += f'({cur.value})'
-    #         if cur.next is not None:
-    #             r += ' ->'
-    #         cur = cur.next
-    #     return r
+
     def insert_at_head(self, node):
         node.next = self.head
         self.head = node
@@ -69,6 +61,7 @@ class HashTable:
         # internal array (stores each inserted value in bucket based on provided key)
         self.data = [None] * self.capacity
         self.ll = [LinkedList()] * capacity
+        self.elements = 0
 
     def get_num_slots(self):
         """
@@ -136,9 +129,6 @@ class HashTable:
         else:
             return self.ll[slot].insert_at_head(HashTableEntry(key, value))
 
-        
-
-
     def delete(self, key):
         """
         Remove the value stored with the given key.
@@ -190,9 +180,6 @@ class HashTable:
             return None 
 
 
-
-
-
 # *************************************
 
     def resize(self, new_capacity):
@@ -203,6 +190,35 @@ class HashTable:
         Implement this.
         """
         # Your code here
+        new_table = self.data
+        self.capacity = new_capacity
+        self.data = [None] * self.capacity
+        # if self.get_load_factor() > 0.7:
+        #     new_table = [self.LinkedList()] * new_capacity
+        for i in range(len(new_table)):
+            current = new_table[i]
+            while current is not None:
+                self.put(current.key, current.value)
+                current = current.next
+                # slot = self.hash_index(key)
+                # self.put(cur.key, cur.value)
+
+                 # 1. Allocate a new array of bigger size, typically double the previous size (or half the size if resizing down, down to some minimum)
+        # new_table = HashTable(new_capacity)
+        # 2. Traverse the old hash table -- O(n) over the number of elements in the hash table
+
+        # for i in range(len(new_data)):
+        #     if new_data is not None:
+        #         cur = new_data[i].head
+        #         while cur.next is not None:
+        #             # For each of the elements:
+        #             #     Figure it's slot in the bigger (or smaller), new array
+        #             #     Put it there
+        #             self.put(cur.key, cur.value)
+        #             cur = cur.next
+        #         index = self.hash_index(cur.key)
+        #         self.put(cur.key, cur.value)
+
 
 
 
