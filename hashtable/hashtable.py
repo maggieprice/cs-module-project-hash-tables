@@ -17,52 +17,43 @@ MIN_CAPACITY = 8
 class LinkedList:
     def __init__(self):
         self.head = None
-    def __str__(self):
-        r = ""
-        cur = self.head
-        while cur is not None: 
-            r += f'({cur.value})'
-            if cur.next is not None:
-                r += ' ->'
-            cur = cur.next
-        return r
+    # def __str__(self):
+    #     r = ""
+    #     cur = self.head
+    #     while cur is not None: 
+    #         r += f'({cur.value})'
+    #         if cur.next is not None:
+    #             r += ' ->'
+    #         cur = cur.next
+    #     return r
     def insert_at_head(self, node):
         node.next = self.head
         self.head = node
-​
-    def find(self, value):
+        return self.head.value
+
+    def find(self, key):
         cur = self.head
-​
         while cur is not None:
-            if cur.value == value:
+            if cur.key == key:
                 return cur
-​
             cur = cur.next
-​
         return None
-    def delete(self, value):
+
+    def delete(self, key):
         cur = self.head
-​
-        if cur.value == value:
+        if cur.key == key:
             self.head = self.head.next
             return cur
-
         prev = cur
         cur = cur.next
-​
         while cur is not None:
-            if cur.value == value:  
+            if cur.key == key:  
                 prev.next = cur.next  
                 return cur
-​
             else:
                 prev = prev.next
                 cur = cur.next
-​
         return None
-​
-
-    
 
 class HashTable:
     """
@@ -77,6 +68,7 @@ class HashTable:
         self.capacity = capacity
         # internal array (stores each inserted value in bucket based on provided key)
         self.data = [None] * self.capacity
+        self.ll = [LinkedList()] * capacity
 
     def get_num_slots(self):
         """
@@ -132,8 +124,18 @@ class HashTable:
 
         Implement this.
         """
+        # * Find the slot for the key
         slot = self.hash_index(key)
-        self.data[slot] = HashTableEntry(key, value)
+        # * Search the linked list for the key
+        cur = self.ll[slot].find(key)
+        # * If found, update it
+        if cur is not None:
+            cur.value = value 
+            return cur.value
+        # * If not found, make a new HashTableEntry and add it to the list
+        else:
+            return self.ll[slot].insert_at_head(HashTableEntry(key, value))
+
         
 
 
@@ -145,9 +147,19 @@ class HashTable:
 
         Implement this.
         """
-        # slot = self.hash_index(key)
         # self.buckets[slot] = None
-        self.put(key, None)
+        # * Find the slot for the key
+        slot = self.hash_index(key)
+        # * Search the linked list for the key
+        cur = self.ll[slot].find(key)
+        # * If found, delete it from the linked list, then return the deleted value
+        if cur is not None:
+            return self.ll[slot].delete(key)
+
+        # * If not found, return None
+        else:
+            return None
+        # self.put(key, None)
 
 
     def get(self, key):
@@ -160,11 +172,26 @@ class HashTable:
         """
         # Your code here
         # Get Slot for Key
+        # slot = self.hash_index(key)
+        # # Store value there
+        # hash_entry = self.data[slot]
+        # if hash_entry is not None:
+        #     return hash_entry.value
+
+        # Find the slot for the key
         slot = self.hash_index(key)
-        # Store value there
-        hash_entry = self.data[slot]
-        if hash_entry is not None:
-            return hash_entry.value
+        # * Search the linked list for the key
+        cur = self.ll[slot].find(key)
+        # * If found, return the value
+        if cur is not None:
+            return cur.value 
+        # * If not found, return None
+        else:
+            return None 
+
+
+
+
 
 # *************************************
 
