@@ -190,16 +190,21 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        new_table = self.data
+        self.ll = [LinkedList()] * new_capacity
+        new_table = self.ll
         self.capacity = new_capacity
-        self.data = [None] * self.capacity
+        # cur = None
+        # old_elements = self.elements
         # if self.get_load_factor() > 0.7:
         #     new_table = [self.LinkedList()] * new_capacity
-        for i in range(len(new_table)):
-            current = new_table[i]
-            while current is not None:
-                self.put(current.key, current.value)
-                current = current.next
+        # Take a look
+        for i in new_table: 
+            cur = i
+            while cur is not None:
+                self.put(cur.key, cur.value)
+                cur = cur.next
+        self.elements = old_elements
+
                 # slot = self.hash_index(key)
                 # self.put(cur.key, cur.value)
 
